@@ -19,7 +19,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/", indexRouter);
-app.use("/api", mainRouter);
+app.use("/api/", mainRouter);
 
 app.listen(process.env.Port, () => {
     console.log("App listening on port", 5000)
