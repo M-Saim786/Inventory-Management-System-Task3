@@ -1,5 +1,5 @@
 const exp = require("express");
-const { addCategory, getCategory, updateCategory, deleteCateogry } = require("../Controller/CategoryController");
+const { addCategory, getCategory, updateCategory, deleteCateogry, searchProdcut } = require("../Controller/CategoryController");
 const { signUpUser, loginUser } = require("../Controller/UserController");
 const protect = require("../Middleware/AuthMiddleware");
 const { addProduct, deleteProduct, updateProduct, getProducts, updateStocks, sellStocks } = require("../Controller/ProductController");
@@ -17,6 +17,8 @@ router.delete("/product", protect, deleteProduct)
 // ----------- update stock levels --------------
 router.post("/stock/add", protect, updateStocks)
 router.post("/stock/sell", protect, sellStocks)
+// ----------- Search Products --------------
+router.post("/product/search",  searchProdcut)
 
 
 // ----------- category crud -----------------
