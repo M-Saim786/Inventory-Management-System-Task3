@@ -22,3 +22,5 @@ app.use("/api", mainRouter);
 app.listen(process.env.Port, () => {
     console.log("App listening on port", 5000)
 })
+
+module.exports = app;
