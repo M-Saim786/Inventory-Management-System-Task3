@@ -37,7 +37,35 @@ exports.addProduct = async (req, res) => {
 
 exports.getProducts = async (req, res) => {
     try {
-        const data = await ProductSchema.find();
+        const data = await ProductSchema.aggregate([
+            { $match: {} },
+            {
+                $lookup: {
+                    from: "categories",
+                    let: { id: "$category" },
+                    pipeline: [{
+                        $match: {
+                            $expr: {
+                                $and: { $eq: ["$_id", "$$id"] }
+                            }
+                        }
+                    },
+                    { $project: { name: 1 } }
+                    ],
+                    as: "Category"
+                }
+            },
+            {
+                $project: {
+                    name: 1,
+                    price: 1,
+                    stock: 1,
+                    // "Product": 0,
+                    // "Category": 0,
+                    category: { $arrayElemAt: ["$Category.name", 0] },
+                }
+            }
+        ]);
         return res.status(200).json({
             data: data
         })
@@ -152,7 +180,7 @@ exports.sellStocks = async (req, res) => {
         const newStock = product.stock - stock;
         console.log("newStock:", newStock)
         console.log("product.stock:", product.stock)
-        
+
         product.stock = newStock;
         await product.save();
 
